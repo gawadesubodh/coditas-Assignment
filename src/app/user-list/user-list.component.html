@@ -1,0 +1,29 @@
+<!-- <div class="topnav">
+  <a class="active" href="#home">Home</a>
+   <div class="dropdown">
+    <button class="dropbtn">sort by name 
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+      <a href="#">Link 1</a>
+      <a href="#">Link 2</a>
+      <a href="#">Link 3</a>
+    </div>
+  </div> 
+ 
+  <div class="search-container">
+    <form action="/action_page.php">
+      <input type="text" name="search">
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
+</div> -->
+<input type="text"  [(ngModel)]="searchUsername" >
+{{searchUsername}}
+<!-- Total Result= {{userList.length}} -->
+<div *ngIf="isLoaded">
+  <div *ngFor="let user of userList | username : searchUsername" >
+  <h6>{{user.login}}</h6>
+
+  </div>
+</div>
