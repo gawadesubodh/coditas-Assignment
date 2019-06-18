@@ -30,6 +30,33 @@ export class UserListComponent implements OnInit {
     this.showConfig();
 
   }
+
+  sortarryaz(){
+    this.userList.sort((a,b) => (a.login > b.login) ? 1 : ((b.login > a.login) ? -1 : 0)); 
+  }
+
+  sortarryza(){
+    this.userList.sort((a,b) => (a.login < b.login) ? 1 : ((b.login < a.login) ? -1 : 0)); 
+  }
+
+  sortarryzaidrant1(){
+    this.userList.sort((a,b) => (a.id < b.id) ? 1 : ((b.id < a.id) ? -1 : 0)); 
+  }
+
+  sortarryzaidrant2(){
+    this.userList.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0)); 
+  }
+
+
+  compare( a, b ) {
+    if ( a.last_nom < b.last_nom ){
+      return -1;
+    }
+    if ( a.last_nom > b.last_nom ){
+      return 1;
+    }
+    return 0;
+  }
   
 
 }

@@ -18,6 +18,11 @@
     </form>
   </div>
 </div> -->
+<select id="selectid" class="form-control-mb-12" (change)="modo($event.target.value)" [value]='mod2'>
+  <option value="mod1">MODO 1</option>
+  <option value="mod2">MODO 2</option>
+  <option value="mod3">MODO 3</option>
+</select>
 <input type="text"  [(ngModel)]="searchUsername" >
 {{searchUsername}}
 <!-- Total Result= {{userList.length}} -->
@@ -27,3 +32,4 @@
 
   </div>
 </div>
+<button (click)="sortarryzaidrant2()" > sortarray</button>
