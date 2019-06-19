@@ -1,6 +1,7 @@
 import { SortService } from './sort.service/sort.service';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './api.services/api.service'
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-list',
@@ -19,9 +20,11 @@ export class UserListComponent implements OnInit {
   userdata: boolean = false;
   currentUser: string;
   selectedValue: string = "Name(A-Z)";
+  private subscriptionUser:Subscription;
+  private subscriptionRepo:Subscription;
 
   showConfig() {
-    this.api.getUserList()
+  this.subscriptionUser=  this.api.getUserList()
       .subscribe((data) => {
         this.userList = data;
         this.sortService.sortAtoZ(this.userList);
@@ -33,7 +36,7 @@ export class UserListComponent implements OnInit {
     this.userdata = !this.userdata
     if (this.userdata) {
       this.currentUser = user
-      this.api.getSingleUserList(user)
+    this.subscriptionRepo=  this.api.getSingleUserList(user)
         .subscribe((data) => {
           this.singleUse = data;
           this.userdata = true;
@@ -46,6 +49,13 @@ export class UserListComponent implements OnInit {
     this.showConfig();
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.subscriptionUser.unsubscribe();
+    this.subscriptionRepo.unsubscribe();
+    
+  }
   SortChange(value: string) {
     switch (value) {
       case "Name(A-Z)":
