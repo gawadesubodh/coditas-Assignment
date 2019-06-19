@@ -1,35 +1,54 @@
-<!-- <div class="topnav">
-  <a class="active" href="#home">Home</a>
-   <div class="dropdown">
-    <button class="dropbtn">sort by name 
-      <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-content">
-      <a href="#">Link 1</a>
-      <a href="#">Link 2</a>
-      <a href="#">Link 3</a>
-    </div>
-  </div> 
- 
-  <div class="search-container">
-    <form action="/action_page.php">
-      <input type="text" name="search">
-      <button type="submit"><i class="fa fa-search"></i></button>
-    </form>
-  </div>
-</div> -->
-<select id="selectid" class="form-control-mb-12" (change)="modo($event.target.value)" [value]='mod2'>
-  <option value="mod1">MODO 1</option>
-  <option value="mod2">MODO 2</option>
-  <option value="mod3">MODO 3</option>
-</select>
-<input type="text"  [(ngModel)]="searchUsername" >
-{{searchUsername}}
-<!-- Total Result= {{userList.length}} -->
-<div *ngIf="isLoaded">
-  <div *ngFor="let user of userList | username : searchUsername" >
-  <h6>{{user.login}}</h6>
+<div class="topnav">
+    <div class="dropdown">
+        <select id="selectid" [(ngModel)]='selectedValue' class="dropbtn" (change)="SortChange($event.target.value)" [value]='mod2'>
+      <option value="Name(A-Z)" selected>Name(A-Z)</option>
+      <option value="Name(Z-A)">Name(Z-A)</option>
+      <option value="Rankup">Rank&uarr;</option>
+      <option value="Rankdown">Rank&darr;</option>
+    </select>
 
-  </div>
+    </div>
+    <div class="search-container">
+        <form action="/action_page.php">
+            <input type="text" name="search" [(ngModel)]="searchUsername">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
 </div>
-<button (click)="sortarryzaidrant2()" > sortarray</button>
+<h5 *ngIf="isLoaded" class="totalResult">Total Result= {{userList.length}}</h5>
+<div *ngIf="isLoaded" class="mainDiv">
+    <div *ngFor="let user of userList | username : searchUsername | paginate:{itemsPerPage:5,currentPage:p}">
+        <div class="listDiv">
+            <img src="assets/image.png" alt="Avatar" class="userImg">
+            <h2 class="singleLine">{{user.login}}</h2>
+            <br>
+            <div>
+                <h6 class="singleLine">Profile URL:{{user.url}}</h6> <button class="button button2" (click)="showSigleUser(user.login)">{{ userdata && userdata && user.login == currentUser ? 'Collapse':'Details'}}</button>
+                <div class="detailList" *ngIf="userdata && user.login == currentUser ">
+
+                    <div *ngFor="let user1 of singleUse">
+                        <ol>
+                            <li class="singleLine">
+                                <h5 class="singleLine"> <i>Name</i> : {{user1.name}} </h5>
+                            </li>
+
+                            <li class="singleLine">
+                                <h5 class="singleLine"> <i> Language : </i> {{user1.language}} </h5>
+                            </li>
+                            <li class="singleLine">
+                                <h5 class="singleLine"> <i>Forks:</i> {{user1.forks}} </h5>
+                            </li>
+
+                            <li class="singleLine">
+                                <h5 class="singleLine"> <i> Open Issues Count: </i> {{user1.open_issues_count}} </h5>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+    </div>
+    <pagination-controls (pageChange)="p=$event"></pagination-controls>
+</div>

@@ -12,10 +12,13 @@ export class ApiService {
 
     
   }
+
   public getUserList(){
     return this.httpClient.get(`${this.apiURL}/users`);
   }
-  public getSingleUserList(){
-    return this.httpClient.get(`${this.apiURL}/customers`);
+  public getSingleUserList(username){
+    return this.httpClient.get(`${this.apiURL}/users/${username}/repos`);
   }
+
+   
 }

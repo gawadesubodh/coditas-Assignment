@@ -1,5 +1,6 @@
-import { ApiService } from './../api.service';
+import { SortService } from './sort.service';
 import { Component, OnInit } from '@angular/core';
+import{ApiService} from './api.services/api.service'
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -7,56 +8,58 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserListComponent implements OnInit {
 
-  constructor( public api:ApiService ) { 
+  constructor( public api:ApiService ,public sortService:SortService) { 
 
   }
   searchUsername:string;
   userList:any;
-  Config:any;
-  isLoaded:boolean=false
-  showConfig() {
+  singleUse:any;
+  isLoaded:boolean=false;
+  userdata:boolean=false;
+  currentUser:string;
+  selectedValue:string="Name(A-Z)";
+
+    showConfig() {
     this.api.getUserList()
       .subscribe((data) =>  {
        this.userList=data; 
-       console.log('this.userList',this.userList); 
-      this.isLoaded=true;
+       this.sortService.sortAtoZ(this.userList);
+       this.isLoaded=true;
       });
   }
 
+  showSigleUser(user){
+    this.userdata = !this.userdata
+   if(this.userdata){
+   this.currentUser=user
+    this.api.getSingleUserList(user)
+    .subscribe((data) =>  {
+     this.singleUse=data; 
+     this.userdata=true;
+
+    });
+    }
+    
+  }
   ngOnInit() {
     this.showConfig();
   }
-  ngAfterViewInit(){
-    this.showConfig();
-
-  }
-
-  sortarryaz(){
-    this.userList.sort((a,b) => (a.login > b.login) ? 1 : ((b.login > a.login) ? -1 : 0)); 
-  }
-
-  sortarryza(){
-    this.userList.sort((a,b) => (a.login < b.login) ? 1 : ((b.login < a.login) ? -1 : 0)); 
-  }
-
-  sortarryzaidrant1(){
-    this.userList.sort((a,b) => (a.id < b.id) ? 1 : ((b.id < a.id) ? -1 : 0)); 
-  }
-
-  sortarryzaidrant2(){
-    this.userList.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0)); 
-  }
-
-
-  compare( a, b ) {
-    if ( a.last_nom < b.last_nom ){
-      return -1;
-    }
-    if ( a.last_nom > b.last_nom ){
-      return 1;
-    }
-    return 0;
-  }
   
+  SortChange(value: string){
+    switch(value) {
+      case "Name(A-Z)":
+         this.sortService.sortAtoZ(this.userList)
+         break;
+      case "Name(Z-A)":
+        this.sortService.sortZtoA(this.userList)
+         break;
+      case "Rankup":
+        this.sortService.sortaRankup(this.userList)
+         break;
+         case "Rankdown":
+        this.sortService.sortaRankdown(this.userList)
+         break;
+    }
+  }
 
 }
